@@ -37,3 +37,44 @@ body, html {
   color: #333;
   font-size: 1rem;
 }
+
+.news-list {
+  margin-top: 40px;
+  text-align: left;
+  padding: 0 20px;
+}
+
+.news-list h2 {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.news-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.news-card {
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 6px;
+  margin-bottom: 15px;
+  background: #fafafa;
+  transition: 0.3s ease;
+}
+
+.news-card:hover {
+  background-color: #f0f0f0;
+}
+
+.news-card h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #00509d;
+}
+
+.news-card p {
+  margin: 5px 0 0;
+  color: #555;
+}
