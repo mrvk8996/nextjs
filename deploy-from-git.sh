@@ -3,7 +3,7 @@
 # -------- CONFIGURATION --------
 PROJECT_NAME="my-nextjs-app"
 PROJECT_DIR="$HOME/$PROJECT_NAME"
-GIT_REPO="https://github.com/your-username/your-repo.git"  # 🔁 Change this
+GIT_REPO="https://github.com/mrvk8996/nextjs"  # 🔁 Change this
 
 echo "📁 Navigating to home directory..."
 cd ~

@@ -63,7 +63,6 @@ fi
 # -------- VERIFY NODE/NPM --------
 echo "📦 Node: $(node -v)"
 echo "📦 npm: $(npm -v)"
-
 source ~/.bashrc
 
 # -------- CLONE OR PULL PROJECT --------
