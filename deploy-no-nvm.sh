@@ -2,8 +2,8 @@
 
 # -------- CONFIGURATION --------
 PROJECT_NAME="my-nextjs-app"
-GIT_REPO="https://github.com/mrvk8996/nextjs"  # 🔁 Update this
-DOMAIN_OR_IP="52.66.240.144"                           # 🔁 Update this
+GIT_REPO="https://github.com/your-username/your-repo.git"  # 🔁 Change this
+DOMAIN_OR_IP="your-domain-or-ip"                           # 🔁 Change this
 PORT=3000
 
 echo "📁 Switching to home directory..."
@@ -14,57 +14,21 @@ echo "🔄 Updating system packages..."
 sudo apt-get update -y && sudo apt-get upgrade -y
 
 # -------- INSTALL ESSENTIALS --------
-echo "🛠 Installing essential tools and Nginx..."
+echo "🛠 Installing essential packages and Nginx..."
 sudo apt-get install -y build-essential nginx curl git
 
-# -------- INSTALL NVM IF NEEDED --------
-if ! command -v nvm &> /dev/null; then
-    echo "📥 Installing NVM..."
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.2/install.sh | bash
-fi
-
-# Always source it after install or if already there
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-
-
-
-# -------- ADD NVM TO BASHRC (if missing) --------
-if ! grep -q 'nvm.sh' ~/.bashrc; then
-    echo "➕ Adding NVM to ~/.bashrc"
-    cat << 'EOF' >> ~/.bashrc
-
-# NVM setup
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-nvm use --lts
-EOF
-fi
-
-# -------- LOAD NVM NOW --------
-export NVM_DIR="$HOME/.nvm"
-source "$NVM_DIR/nvm.sh"
-
-# -------- INSTALL NODE IF NEEDED --------
+# -------- INSTALL NODEJS (Without NVM) --------
 if ! command -v node &> /dev/null; then
-    echo "📦 Installing latest LTS Node.js..."
-    nvm install --lts
+    echo "📦 Installing Node.js and npm (via apt)..."
+    curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+    sudo apt-get install -y nodejs
 else
-    echo "✅ Node.js version: $(node -v)"
-fi
-
-# Ensure NPM is available
-if ! command -v npm &> /dev/null; then
-    echo "❌ npm not found! Exiting."
-    exit 1
+    echo "✅ Node.js is already installed: $(node -v)"
 fi
 
 # -------- VERIFY NODE/NPM --------
 echo "📦 Node: $(node -v)"
 echo "📦 npm: $(npm -v)"
-
-source ~/.bashrc
 
 # -------- CLONE OR PULL PROJECT --------
 if [ ! -d "$PROJECT_NAME" ]; then
@@ -82,7 +46,7 @@ cd "$PROJECT_NAME"
 echo "📦 Installing project dependencies..."
 npm install
 
-echo "🏗 Building Next.js project..."
+echo "🏗 Building the Next.js project..."
 npm run build
 
 # -------- CONFIGURE NGINX --------
@@ -112,7 +76,7 @@ sudo nginx -t && sudo systemctl restart nginx
 # -------- INSTALL PM2 IF MISSING --------
 if ! command -v pm2 &> /dev/null; then
     echo "🚀 Installing PM2..."
-    npm install -g pm2
+    sudo npm install -g pm2
 else
     echo "✅ PM2 already installed"
 fi
@@ -125,7 +89,6 @@ pm2 delete "$PROJECT_NAME" 2>/dev/null || true
 echo "▶️ Starting app with PM2..."
 pm2 start npm --name "$PROJECT_NAME" -- start
 pm2 save
-# Automatically enable PM2 startup
-eval "$(pm2 startup systemd -u $USER --hp $HOME | tail -n 1)"
+eval "$(pm2 startup systemd -u $USER --hp $HOME)"
 
 echo "✅ DONE! App deployed and running at: http://$DOMAIN_OR_IP"
