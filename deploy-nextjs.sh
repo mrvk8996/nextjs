@@ -2,8 +2,8 @@
 
 # -------- CONFIGURATION --------
 PROJECT_NAME="my-nextjs-app"
-GIT_REPO="https://github.com/your-username/your-repo.git"  # 🔁 Update this
-DOMAIN_OR_IP="your-domain-or-ip"                           # 🔁 Update this
+GIT_REPO="https://github.com/mrvk8996/nextjs"  # 🔁 Update this
+DOMAIN_OR_IP="52.66.240.144"                           # 🔁 Update this
 PORT=3000
 
 echo "📁 Switching to home directory..."
