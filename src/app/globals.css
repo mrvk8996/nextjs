@@ -78,3 +78,41 @@ body, html {
   margin: 5px 0 0;
   color: #555;
 }
+
+
+.site-header {
+  background-color: #003366;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  position: relative;
+}
+
+.selected-info {
+  margin-top: 10px;
+  font-size: 0.9rem;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 300px;
+  background: red;
+  padding: 10px;
+}
+
+.selected-list {
+  list-style: none;
+  padding: 5px;
+  margin: 5px auto 0;
+  max-width: 300px;
+  background: #fff;
+  color: #000;
+  text-align: left;
+  border-radius: 5px;
+  max-height: 150px;
+  overflow-y: scroll;
+}
+
+.selected-list li {
+  padding: 3px 10px;
+  border-bottom: 1px solid #eee;
+}
