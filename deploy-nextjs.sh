@@ -2,11 +2,11 @@
 
 # -------- CONFIGURATION --------
 PROJECT_NAME="my-nextjs-app"
-GIT_REPO="https://github.com/your-username/your-repo.git"  # 🔁 Change to your repo
-DOMAIN_OR_IP="your-domain-or-ip"                           # 🔁 Replace with your domain or public IP
+GIT_REPO="https://github.com/your-username/your-repo.git"  # 🔁 Update this
+DOMAIN_OR_IP="your-domain-or-ip"                           # 🔁 Update this
 PORT=3000
 
-echo "📁 Starting from home directory"
+echo "📁 Switching to home directory..."
 cd ~
 
 # -------- SYSTEM UPDATE --------
@@ -17,7 +17,7 @@ sudo apt-get update -y && sudo apt-get upgrade -y
 echo "🛠 Installing essential tools and Nginx..."
 sudo apt-get install -y build-essential nginx curl git
 
-# -------- INSTALL NVM IF MISSING --------
+# -------- INSTALL NVM IF NEEDED --------
 if ! command -v nvm &> /dev/null; then
     echo "📥 Installing NVM..."
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.2/install.sh | bash
@@ -29,17 +29,17 @@ else
     source "$NVM_DIR/nvm.sh"
 fi
 
-# -------- INSTALL NODE IF MISSING --------
+# -------- INSTALL NODE IF NEEDED --------
 if ! command -v node &> /dev/null; then
     echo "📦 Installing latest LTS Node.js..."
     nvm install --lts
 else
-    echo "✅ Node.js already installed: $(node -v)"
+    echo "✅ Node.js version: $(node -v)"
 fi
 
 # Ensure NPM is available
 if ! command -v npm &> /dev/null; then
-    echo "⚠️ npm not found, something is wrong with Node install"
+    echo "❌ npm not found! Exiting."
     exit 1
 fi
 
@@ -48,7 +48,7 @@ if [ ! -d "$PROJECT_NAME" ]; then
     echo "📥 Cloning the project from GitHub..."
     git clone "$GIT_REPO" "$PROJECT_NAME"
 else
-    echo "🔁 Project already exists. Pulling latest changes..."
+    echo "🔁 Pulling latest changes..."
     cd "$PROJECT_NAME"
     git pull
     cd ..
@@ -56,7 +56,7 @@ fi
 
 cd "$PROJECT_NAME"
 
-echo "📦 Installing dependencies..."
+echo "📦 Installing project dependencies..."
 npm install
 
 echo "🏗 Building Next.js project..."
@@ -88,16 +88,20 @@ sudo nginx -t && sudo systemctl restart nginx
 
 # -------- INSTALL PM2 IF MISSING --------
 if ! command -v pm2 &> /dev/null; then
-    echo "🚀 Installing PM2 globally..."
+    echo "🚀 Installing PM2..."
     npm install -g pm2
 else
     echo "✅ PM2 already installed"
 fi
 
-# -------- START APP WITH PM2 --------
+# -------- STOP & DELETE OLD PM2 APP --------
+echo "🧹 Cleaning up old PM2 instances..."
+pm2 delete "$PROJECT_NAME" 2>/dev/null || true
+
+# -------- START WITH PM2 --------
 echo "▶️ Starting app with PM2..."
 pm2 start npm --name "$PROJECT_NAME" -- start
-pm2 startup systemd -u $USER --hp $HOME
 pm2 save
+pm2 startup systemd -u $USER --hp $HOME
 
-echo "✅ Deployment complete! Visit http://$DOMAIN_OR_IP"
+echo "✅ DONE! App deployed and running at: http://$DOMAIN_OR_IP"
